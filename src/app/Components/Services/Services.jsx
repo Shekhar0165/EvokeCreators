@@ -5,7 +5,7 @@ import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
 export default function Services() {
     const images = [
         'HeroSection/GraphicPoster.jpg',
-        // 'HeroSection/image2.jpg',
+        'HeroSection/GraphicPoster.jpg',
         // 'HeroSection/image3.webp',
         // 'HeroSection/image4.webp'
     ];
@@ -58,29 +58,30 @@ export default function Services() {
                     <MdArrowForwardIos size={24} />
                 </button> */}
 
-                <div
-                    className="relative h-full flex transition-transform duration-1000 ease-in-out"
-                    style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
-                >
-                    {images.length > 0 ? (
-                        images.map((image, index) => (
-                            <div key={index} className="w-full h-full flex justify-center items-center flex-shrink-0">
-                                <div className='w-[80%]'>
-
-                                    <img
-                                        src={`/${image}`}
-                                        alt={`Slide ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                            <p>No images available</p>
-                        </div>
-                    )}
+<div
+    className="relative h-full flex transition-transform duration-1000 ease-in-out"
+    style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+>
+    {images.length > 0 ? (
+        images.map((image, index) => (
+            <div key={index} className="w-full h-full flex justify-center items-center flex-shrink-0">
+                <div className='w-full px-4 sm:px-8 md:px-12 lg:w-[80%]'>
+                    <img
+                        src={`/${image}`}
+                        alt={`Slide ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg sm:rounded-xl"
+                    />
                 </div>
+            </div>
+        ))
+    ) : (
+        <div className="w-full h-full flex items-center justify-center">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
+                No images available
+            </p>
+        </div>
+    )}
+</div>
             </div>
         </>
     );
