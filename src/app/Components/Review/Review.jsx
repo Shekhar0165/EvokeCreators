@@ -89,7 +89,7 @@ const Review = () => {
     },
     {
       name: "Rashmi",
-      quote: "People do their work very well, but I didn't like the behavior of the person who answered my call.",
+      quote: "They do their work well and complete it within the time limit. I appreciate the time management aspect of the website. Wishing them all the best for more opportunities!.",
       imageUrl: "/review/image1.jpg",
       rating: 3
     },
