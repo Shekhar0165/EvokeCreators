@@ -107,7 +107,7 @@ export async function POST(request) {
     
     // Define email options
     const mailOptions = {
-      from: process.env.EMAIL_FROM || `"Website Contact" <${process.env.EMAIL_USER}>`,
+      from: email || `"Website Contact" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO || 'creatorsevoke@gmail.com',
       subject: `New Website Inquiry: ${categoryLabel} from ${name}`,
       html: htmlContent,

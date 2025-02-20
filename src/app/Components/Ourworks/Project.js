@@ -67,7 +67,7 @@ const projects = [
         "title": "Evoke Creators Logo",
         "category": "branding",
         "description": "Minimalistic and modern brand logo for Evoke Creators.",
-        "image": "/projectlogo.jpg",
+        "image": "/Projectlogo.jpg",
         "link":"https://www.instagram.com/p/DFheHf7owrM/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==",
         "content": `<div class="py-6">
             <div class="">
