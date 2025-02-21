@@ -38,7 +38,7 @@ export async function POST(request) {
     
     // Create email transporter
     const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+      service: 'Gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
@@ -48,8 +48,8 @@ export async function POST(request) {
     // Format date for email
     const date = new Date().toLocaleString();
     
-    // Create HTML email content
-    const htmlContent = `
+    // Create HTML email content for owner
+    const ownerHtmlContent = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -105,18 +105,76 @@ export async function POST(request) {
       </html>
     `;
     
-    // Define email options
-    const mailOptions = {
+    // Create HTML email content for client auto-response
+    const clientHtmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #4ade80; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+            .content { padding: 20px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 5px 5px; }
+            .footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h2>Thank You for Contacting Us</h2>
+            </div>
+            <div class="content">
+              <p>Dear ${name},</p>
+              
+              <p>Thank you for reaching out to us about your ${categoryLabel.toLowerCase()} project. We have received your message and appreciate your interest in our services.</p>
+              
+              <p>Our team will review your inquiry and get back to you as soon as possible, typically within 1-2 business days.</p>
+              
+              <p>For your records, here's a summary of the information you provided:</p>
+              <ul>
+                <li><strong>Name:</strong> ${name}</li>
+                <li><strong>Project Type:</strong> ${categoryLabel}</li>
+                <li><strong>Date Submitted:</strong> ${date}</li>
+              </ul>
+              
+              <p>If you have any additional information to share or any questions in the meantime, please don't hesitate to reply to this email.</p>
+              
+              <p>We look forward to discussing your project further!</p>
+              
+              <p>Best regards,<br>
+              The Team</p>
+            </div>
+            <div class="footer">
+              <p>This is an automated response. Please do not reply to this email address if a different contact email was provided on our website.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+    
+    // Define email options for owner notification
+    const ownerMailOptions = {
       from: email || `"Website Contact" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO || 'creatorsevoke@gmail.com',
       subject: `New Website Inquiry: ${categoryLabel} from ${name}`,
-      html: htmlContent,
+      html: ownerHtmlContent,
       // Add reply-to header so replies go directly to the customer
       replyTo: email,
     };
     
-    // Send the email
-    await transporter.sendMail(mailOptions);
+    // Define email options for client auto-response
+    const clientMailOptions = {
+      from: `"Evoke Creators" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: `Thank You for Your Inquiry - We've Received Your Message`,
+      html: clientHtmlContent,
+    };
+    
+    // Send both emails using Promise.all for efficiency
+    await Promise.all([
+      transporter.sendMail(ownerMailOptions),
+      transporter.sendMail(clientMailOptions)
+    ]);
     
     // Optional: Save to database if you need to keep records
     // await saveContactToDatabase(body);

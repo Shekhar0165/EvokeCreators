@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useTheme } from '@/app/ThemeContext'
 import { UseInterSectionObserver } from '@/app/UseInterSectionObserver'
 import { X, ChevronRight, Star } from 'lucide-react'
+import toast, { Toaster } from 'react-hot-toast'
 
 const ReviewCard = ({ name, title, quote, imageUrl, isDarkMode, rating = 5, onLearnMore }) => (
   <div className={`p-4 sm:p-6 rounded-xl transition-all duration-500 ease-in-out transform hover:scale-105
@@ -84,7 +85,7 @@ const Review = () => {
     {
       name: "Rini Saxena",
       quote: "People deliver excellent work at an affordable cost, ensuring quality and value for money.",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTruQPG9d5VKMAGSlD05ACOVB2IN8LOE32_CA&s",
+      imageUrl: "/review/image3.jpg",
       rating: 5
     },
     {
@@ -133,6 +134,7 @@ const Review = () => {
       ref={elementRef}
       className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden"
     >
+      <Toaster position="top-center" />
       <div
         className={`text-center mb-8 sm:mb-12 md:mb-16 `}
       >
@@ -190,115 +192,142 @@ const Review = () => {
           Share Your Experience
         </h2>
         <form 
-  onSubmit={async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    
-    try {
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          email: formData.get('email'),
-          rating: formData.get('rating'),
-          review: formData.get('review'),
-        }),
-      });
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            // Show loading toast
+            const loadingToast = toast.loading('Submitting your review...');
+            
+            try {
+              const response = await fetch('/api/reviews', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  name: formData.get('name'),
+                  email: formData.get('email'),
+                  rating: formData.get('rating'),
+                  review: formData.get('review'),
+                }),
+              });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        // Show success message
-        alert('Thank you for your review!');
-        setIsModalOpen(false);
-      } else {
-        // Show error message
-        alert(data.message || 'Failed to submit review. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('An error occurred. Please try again later.');
-    }
-  }} 
-  className="space-y-4 sm:space-y-6"
->
-  <div>
-    <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-      Name
-    </label>
-    <input
-      type="text"
-      name="name"
-      required
-      className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
+              const data = await response.json();
+              
+              // Dismiss loading toast
+              toast.dismiss(loadingToast);
+              
+              if (data.success) {
+                // Show success toast
+                toast.success('Thank you for your review!', {
+                  duration: 5000,
+                  style: {
+                    background: isDarkMode ? '#1F2937' : '#FFFFFF',
+                    color: isDarkMode ? '#FFFFFF' : '#000000',
+                  },
+                });
+                setIsModalOpen(false);
+                e.target.reset(); // Reset form
+              } else {
+                // Show error toast
+                toast.error(data.message || 'Failed to submit review. Please try again.', {
+                  duration: 5000,
+                  style: {
+                    background: isDarkMode ? '#1F2937' : '#FFFFFF',
+                    color: isDarkMode ? '#FFFFFF' : '#000000',
+                  },
+                });
+              }
+            } catch (error) {
+              // Dismiss loading toast and show error toast
+              toast.dismiss(loadingToast);
+              toast.error('An error occurred. Please try again later.', {
+                duration: 5000,
+                style: {
+                  background: isDarkMode ? '#1F2937' : '#FFFFFF',
+                  color: isDarkMode ? '#FFFFFF' : '#000000',
+                },
+              });
+              console.error('Error submitting review:', error);
+            }
+          }} 
+          className="space-y-4 sm:space-y-6"
+        >
+          <div>
+            <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              required
+              className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
       ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}
       focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-      placeholder="Your name"
-    />
-  </div>
-  
-  <div>
-    <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-      Email
-    </label>
-    <input
-      type="email"
-      name="email"
-      required
-      className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
+              placeholder="Your name"
+            />
+          </div>
+
+          <div>
+            <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
       ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}
       focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-      placeholder="Your email address"
-    />
-  </div>
+              placeholder="Your email address"
+            />
+          </div>
 
-  <div>
-    <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-      Rating
-    </label>
-    <select
-      name="rating"
-      required
-      className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
+          <div>
+            <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              Rating
+            </label>
+            <select
+              name="rating"
+              required
+              className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
       ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}
       focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-    >
-      <option value="">Select rating</option>
-      <option value="5">5 stars - Excellent</option>
-      <option value="4">4 stars - Very Good</option>
-      <option value="3">3 stars - Good</option>
-      <option value="2">2 stars - Fair</option>
-      <option value="1">1 star - Poor</option>
-    </select>
-  </div>
+            >
+              <option value="">Select rating</option>
+              <option value="5">5 stars - Excellent</option>
+              <option value="4">4 stars - Very Good</option>
+              <option value="3">3 stars - Good</option>
+              <option value="2">2 stars - Fair</option>
+              <option value="1">1 star - Poor</option>
+            </select>
+          </div>
 
-  <div>
-    <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-      Review
-    </label>
-    <textarea
-      name="review"
-      required
-      rows="4"
-      className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
+          <div>
+            <label className={`block mb-1 sm:mb-2 text-sm sm:text-base ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              Review
+            </label>
+            <textarea
+              name="review"
+              required
+              rows="4"
+              className={`w-full p-2 sm:p-3 border rounded-lg transition-colors text-sm sm:text-base
       ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200'}
       focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-      placeholder="Share your experience..."
-    ></textarea>
-  </div>
+              placeholder="Share your experience..."
+            ></textarea>
+          </div>
 
-  <button
-    type="submit"
-    className="w-full bg-green-600 text-white py-2 sm:py-3 rounded-lg hover:bg-green-700 
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 sm:py-3 rounded-lg hover:bg-green-700 
     transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-green-500 
     focus:ring-offset-2 text-sm sm:text-base"
-  >
-    Submit Review
-  </button>
-</form>
+          >
+            Submit Review
+          </button>
+        </form>
       </Modal>
 
       <Modal

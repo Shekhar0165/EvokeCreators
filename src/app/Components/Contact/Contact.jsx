@@ -1,10 +1,10 @@
-// 1. First, let's update your existing Contact component
 'use client';
 
 import React, { useState } from 'react';
 import { useTheme } from '@/app/ThemeContext';
 import { UseInterSectionObserver } from '@/app/UseInterSectionObserver';
-import { Send, Mail, User, MessageSquare, Phone, ArrowRight, Clock, MapPin } from 'lucide-react';
+import { Send, Mail, User, MessageSquare, Phone, ArrowRight, Clock, MapPin, CheckCircle } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Contact() {
   const { isDarkMode } = useTheme();
@@ -53,6 +53,45 @@ export default function Contact() {
       const data = await response.json();
       
       if (response.ok) {
+        // Show success toast
+        toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? 'animate-enter' : 'animate-leave'
+            } max-w-md w-full ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+          >
+            <div className="flex-1 w-0 p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0 pt-0.5">
+                  <CheckCircle className="h-10 w-10 text-green-500" />
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium">
+                    Message Sent Successfully!
+                  </p>
+                  <p className={`mt-1 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Thank you for contacting us. We'll get back to you soon.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex border-l border-gray-200">
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className={`w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium ${
+                  isDarkMode 
+                    ? 'text-green-400 hover:text-green-500' 
+                    : 'text-green-600 hover:text-green-500'
+                } focus:outline-none focus:ring-2 focus:ring-green-500`}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        ), {
+          duration: 5000,
+        });
+        
         // Reset form
         setFormData({
           name: '',
@@ -62,10 +101,12 @@ export default function Contact() {
           message: ''
         });
       } else {
-        throw new Error(data.message || 'Something went wrong');
+        // Show error toast
+        toast.error(data.message || 'Something went wrong. Please try again.');
       }
     } catch (error) {
-      alert(error);
+      toast.error('Failed to send message. Please try again later.');
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -73,6 +114,9 @@ export default function Contact() {
 
   return (
     <div ref={elementRef} className="min-h-screen relative">
+      {/* Toaster Component */}
+      <Toaster position="top-center" reverseOrder={false} />
+      
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       
