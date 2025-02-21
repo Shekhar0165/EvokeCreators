@@ -159,7 +159,7 @@ export async function POST(request) {
     
     // Define email options for client thank-you email
     const clientMailOptions = {
-      from: `"Your Business Name" <${process.env.EMAIL_USER}>`,
+      from: `"Evoke Creators" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: `Thank You for Your Review!`,
       html: clientHtmlContent,

@@ -164,7 +164,7 @@ export async function POST(request) {
     
     // Define email options for client auto-response
     const clientMailOptions = {
-      from: `"Your Business Name" <${process.env.EMAIL_USER}>`,
+      from: `"Evoke Creators" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: `Thank You for Your Inquiry - We've Received Your Message`,
       html: clientHtmlContent,
