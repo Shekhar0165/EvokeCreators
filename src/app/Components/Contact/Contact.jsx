@@ -25,7 +25,6 @@ export default function Contact() {
     { id: 'web', label: 'Web Development' },
     { id: 'app', label: 'Mobile Apps' },
     { id: 'video', label: 'Video Editing' },
-    { id: 'poster', label: 'Poster Design' },
     { id: 'graphic', label: 'Graphic Design' }
   ];
 
