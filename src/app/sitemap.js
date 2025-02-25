@@ -1,6 +1,6 @@
 // app/sitemap.js
 export default async function sitemap() {
-  const baseUrl = 'https://www.evokecreators.in/';  // Remove trailing slash
+  const baseUrl = 'https://www.evokecreators.in';  // Remove trailing slash
 
   // Define static pages with proper URL encoding
   const pages = [
