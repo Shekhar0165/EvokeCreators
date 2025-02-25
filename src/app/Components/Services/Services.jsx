@@ -4,10 +4,10 @@ import { MdArrowForwardIos, MdArrowBackIos } from 'react-icons/md';
 
 export default function Services() {
     const images = [
-        'HeroSection/GraphicPoster.jpg',
-        'HeroSection/GraphicPoster.jpg',
-        // 'HeroSection/image3.webp',
-        // 'HeroSection/image4.webp'
+        'HeroSection/image1.png',
+        'HeroSection/image2.png',
+        'HeroSection/image3.png',
+        'HeroSection/image4.png'
     ];
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -37,7 +37,7 @@ export default function Services() {
         <>
             <div className="w-full h-[90%] overflow-hidden relative z-0">
                 {/* Left Arrow */}
-                {/* <button
+                <button
                     onClick={prevImage}
                     className="absolute lg:left-20 left-4 top-1/2 transform -translate-y-1/2 z-10 
                   hover:text-green-600 text-white p-2 rounded-full
@@ -45,10 +45,10 @@ export default function Services() {
                     aria-label="Previous image"
                 >
                     <MdArrowBackIos size={24} />
-                </button> */}
+                </button>
 
                 {/* Right Arrow */}
-                {/* <button
+                <button
                     onClick={nextImage}
                     className="absolute lg:right-20 right-4 top-1/2 transform -translate-y-1/2 z-10 
                   hover:text-green-600 text-white p-2 rounded-full
@@ -56,7 +56,7 @@ export default function Services() {
                     aria-label="Next image"
                 >
                     <MdArrowForwardIos size={24} />
-                </button> */}
+                </button>
 
 <div
     className="relative h-full flex transition-transform duration-1000 ease-in-out"
