@@ -42,6 +42,7 @@ export default function RootLayout({ children }) {
         <meta name="author" content={metadata.author} />
         <meta name="viewport" content={metadata.viewport} />
         <meta name="robots" content={metadata.robots} />
+        <meta name="google-adsense-account" content="ca-pub-3181101372638451"></meta>
       </head>
       <body
         className={`${roboto.variable} ${roboto.className} antialiased bg-light`}
