@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "./ThemeContext";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
+import Script from "next/script";
+
 
 const roboto = Roboto({
   weight: "400",
@@ -47,6 +49,14 @@ export default function RootLayout({ children }) {
       <body
         className={`${roboto.variable} ${roboto.className} antialiased bg-light`}
       >
+        {/* AdSense Script */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3181101372638451"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        
         <ThemeProvider>
           <Navbar />
           {children}
